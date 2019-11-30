@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>刷新点击</title>
+	<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div style="width: 600px;margin: 0 auto;">
+	<input type="hidden" id="word" style="width: 150px;height: 40px;" value="1000000">
+	<div>
+		<button onclick="change()" style="width: 150px;height: 40px;">点击</button>
+	</div>
+	注：当大量出现投票次数过多，请断网更换ip后重新启动刷新
+	<div id="message"></div>
+
+</div>
+<script type="text/javascript">
+
+	//点击事件
+	function change()
+	{
+		$('#message').empty();
+		var word = $("#word").val();
+		check(word,0);
+	}
+
+	function check(length,key)
+	{
+
+		//数据加1
+		var val = key+1;
+		if(key == length)
+		{
+			$("#message").append("<text style='color:red'>检测完毕！！！</text><br>");
+			return;
+		}
+		$.ajax({
+			url: 'https://api.henandaily.cn/hnsjb/activity/henan1minute_support',
+			data:{submit:1,city:'luoyang'},
+			type: 'GET',
+			dataType: 'json',
+			success: function(response){
+				console.log(response)
+				if(response.status == 0){
+					$("#message").append("<text style='color:red'>"+response.info+"</a></text><br>");
+				}
+				else
+				{
+					$("#message").append("<text style='color:green'>success</text><br>");
+				}
+				// 
+			 	setTimeout(function () { 
+			        check(length,val)
+			    }, 1000);
+			}
+		});
+	}
+</script>
+</body>
+</html>

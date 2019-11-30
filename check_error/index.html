@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>检测</title>
+	<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div style="width: 600px;margin: 0 auto;">
+	<p>代码</p>
+	<textarea rows="20" cols="80" id="cutstr_old"></textarea>
+	查询字：<input type="text" id="word" style="width: 150px;height: 40px;" value="努尔·白克力">
+	<div>
+		<button onclick="change()" style="width: 150px;height: 40px;">检查</button>
+	</div>
+	<div id="message"></div>
+</div>
+<script type="text/javascript">
+
+	//点击事件
+	function change()
+	{
+		$('#message').empty();
+		var re=/<a[^>]*href=['"]([^"]*)['"][^>]*>(.*?)<\/a>/g;
+		//获取所有值
+		var sTest = $("#cutstr_old").val();
+		var arr=[];
+		while(re.exec(sTest)!=null){
+			arr.push(RegExp.$1+"\n");//如果是RegExp.$1那么匹配的就是href里的属性了!
+		}
+		$("#message").append("<text style='color:green'>共"+arr.length + "条数据</text><br>");
+		check(arr,arr.length,0);
+	}
+
+	function check(arr,length,key)
+	{
+		var word = $("#word").val();
+		//数据加1
+		var val = key+1;
+		if(key == length)
+		{
+			$("#cutstr_news").text("检测完毕！！！");
+			return;
+		}
+		$.ajax({
+			url: 'Index.php',
+			data:{url:arr[key],word:word},
+			type: 'GET',
+			dataType: 'json',
+			success: function(response){
+				console.log(response)
+				if(response.status == 1){
+					$("#message").append("<text style='color:red'><a herf='"+response.url+"'>"+response.url + "</a></text><br>");
+				}
+				else
+				{
+					$("#message").append(""+response.url + "<br>");
+				}
+				check(arr,arr.length,val);
+			}
+		});
+	}
+</script>
+</body>
+</html>

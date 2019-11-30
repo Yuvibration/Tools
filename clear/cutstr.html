@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>清除html</title>
+	<script type="text/javascript" src="jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<div style="width: 600px;margin: 0 auto;">
+	<p>处理前代码</p>
+	<textarea rows="20" cols="80" id="cutstr_old"></textarea>
+	<div>
+		<button onclick="change()" style="width: 150px;height: 40px;">转换</button>
+	</div>
+	<p>处理后文字</p>
+	<textarea rows="20" cols="80" id="cutstr_news"></textarea>
+</div>
+<script type="text/javascript">
+
+	//点击事件
+	function change()
+	{
+		//获取所有值
+		var sTest = $("#cutstr_old").val();
+		//复制操作
+		$("#cutstr_news").val(clear(sTest));
+	}
+
+
+
+	//清除操作
+	function clear(sTest)
+	{
+		//匹配代码规则
+		var reTag = /<(?:.|\s)*?>/g;
+		//匹配空格规则
+		var reSp = /&nbsp;/ig
+
+
+		var text = sTest.replace(reTag,"")
+		var htm1 = text.replace(/&nbsp;/ig,'');
+		return htm1;
+	}
+	
+</script>
+</body>
+</html>

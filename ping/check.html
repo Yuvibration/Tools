@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>Ping</title>
+    <style type="text/css">
+    #demoForm {
+        border: 1px dashed #f2f2f2;
+        margin-top:10px;
+        margin-bottom:10px;
+        padding-top:10px;
+        padding-bottom:10px;
+        text-align:center;
+    }
+
+    #demoForm .progressbar { 
+        width:100%; 
+        display:none;
+    } 
+
+    #demoForm .progressbar #loading { 
+        width:400px; 
+        height:20px; 
+        background:/* url(20100311165403426.png) no-repeat */#f6f6f6; 
+        position: relative;
+        margin: 0 auto;
+    } 
+
+    #demoForm .progressbar #loading .progress { 
+        width:0px; 
+        height:20px; 
+        line-height:20px; 
+        background:#45B6F7/*url(20100311165403115.png) no-repeat*/; 
+    } 
+
+    #demoForm .progressbar #loading .percent {
+        width:100%;
+        height:20px; 
+        line-height:20px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        color:#fff; 
+        z-index: 10;
+        text-align:center; 
+        font-family:Tahoma; 
+        font-size:12px; 
+    }
+
+    #demoForm .progressbar #message { 
+        width:100%; 
+        height:25px; 
+        line-height:25px;
+        font-family:Tahoma; 
+        font-size:12px; 
+        /* background-color:#d8e7f0;  */
+        /* border:1px solid #187CBE;  */
+        text-align:center; 
+        margin-top:10px; 
+
+        /* display:none;  */
+    }
+
+    #demoForm .execute {
+        width:100%; 
+        text-align:center;
+        display:none;
+    }
+
+    #demoForm .execute #filepath { 
+        width:100%; 
+        height:25px; 
+        line-height:25px;
+        font-family:Tahoma; 
+        font-size:12px; 
+        /* background-color:#d8e7f0;  */
+        /* border:1px solid #187CBE;  */
+        text-align:center; 
+        margin-bottom:10px; 
+
+        /* display:none;  */
+    }
+
+    #demoForm .execute button {
+        width: 160px;height: 44px;border: medium none;border-radius: 2px;background: #00A3D9 none repeat scroll 0% 0%;font-size: 16px;color: #FFF;cursor: pointer;
+    }
+
+
+    /* http://www.ablanxue.com/prone_21850_1.html */
+    #demoForm .new-contentarea {
+        width: 100%;
+        overflow:hidden;
+        margin: 0 auto;
+        position:relative;
+        display:block;
+    }
+    #demoForm .new-contentarea label {
+        width:100%;
+        height:100%;
+        display:block;
+        color: #FFFFFF;
+        text-align:center;
+        /* font-size: 20px;
+        font: 400 14px/1.5 Arial,"Lucida Grande",Verdana,"Microsoft YaHei",hei; */
+        font: 400 20px/2.85 Arial,"Lucida Grande",Verdana,"Microsoft YaHei",hei;
+
+    }
+    #demoForm .new-contentarea input[type=file] {
+        width:166px;
+        height:57px;
+        background:#333;
+        /* margin: 0 auto; */
+        position:absolute;
+        top:0;
+        right/*\**/:0px\9;
+        margin-right/*\**/:0px\9;
+        width/*\**/:10px\9;
+        opacity:0;
+        filter:alpha(opacity=0);
+        z-index:2;
+    }
+    #demoForm .new-contentarea a.upload-file{
+        width:166px;
+        display: inline-block;
+        height:57px;
+        line-height: 57px;
+        background-color: #f38e81;
+        border-radius: 3px;
+        text-decoration:none;
+        cursor:pointer;
+    }
+    #demoForm .new-contentarea a.upload-file:hover{
+        background-color: #ec7e70;
+    }
+    </style>
+    <script type="text/javascript" src="jquery-3.3.1.min.js" charset="utf-8"></script>
+</head>
+<body>
+    <form id="demoForm" name="demoForm" method="post" enctype="multipart/form-data" action="javascript: uploadAndSubmit();">
+        填写检测的ip地址<input type="text" id="ip">
+        <div class="progressbar"> 
+            <div id="loading">
+                <div class="progress"></div>
+                <div class="percent"></div>
+            </div> 
+            <div id="message"></div> 
+        </div> 
+        <div class="execute">
+            <div id="filepath"></div> 
+            <button>立即执行</button>
+        </div>
+            <div class="new-contentarea" style="text-align:center;">
+            <a href="javascript:void(0)" class="upload-file"><label for="upload-file">上传文件</label></a>
+            <input type="file" name="file" id="upload-file" style="right:50%;margin-right:-83px;" />
+        </div>
+    </form>         
+
+    <script type="text/javascript">
+
+    var arr = new Array();
+    $("#upload-file").change(function() {
+        var path = $(this).val();
+        if (path != null && path != "") {
+            $(".new-contentarea").css("display","none");
+            $(".progressbar").css("display","none");
+            $(".execute").css("display","block");
+        } 
+        $("#filepath").html(path);
+    });
+
+    function uploadAndSubmit() {
+        $(".new-contentarea").css("display","none");
+        $(".progressbar").css("display","block");
+        $(".execute").css("display","none");
+
+        var form = document.forms["demoForm"];
+        if (form["file"].files.length > 0) {
+            var file = form["file"].files[0];
+            var reader = new FileReader();
+
+            reader.onloadstart = function() {
+                $("#message").html("开始加载..<br>");
+            };
+
+            reader.onprogress = function(p) {
+                $("#message").append("正在加载(Bytes：" + p.loaded + "/" + file.size + ")..<br>");
+            };
+            reader.onload = function() {
+                $("#message").append("完成加载..<br>");
+            };
+
+            reader.onloadend  = function() {
+                if (reader.error) {
+                    $("#message").append("文件加载失败!");
+                } else {
+                    var ppt = reader.result;
+                    var error = "";
+                    arr = ppt.split('\r\n');
+                    check(arr,arr.length,0);
+
+                }
+            };
+            reader.readAsText(file);
+        }
+    }
+    //检测能否访问
+    function check(arr,length,key)
+    {
+        //数据加1
+        var val = key+1;
+
+        if(key == length)
+        {
+            $("#message").append("文件已处理完毕！！！").fadeIn("slow");
+            return;
+        }
+        $("#message").append("正在处理第" + val + "条数据..<br>").fadeIn("slow");
+        href = arr[key];
+        ip = $("#ip").val();
+        $.ajax({
+            url: 'Ping.php',
+            data:{url:href,ip:ip},
+            type: 'GET',
+            dataType: 'json',
+            success: function(response){
+                console.log(response);
+                if(response.status == 200){
+                    $("#message").append(response.url+"的ip地址为："+response.ip + "<br>");
+
+                }
+                else if(response.status == 1)
+                {
+                    $("#message").append(response.url+"的ip地址为：<text style='color:blue'>"+response.ip + "</text><br>");
+                }
+                else
+                {
+                    $("#message").append(response.url+"的ip地址为：<text style='color:red'>"+response.ip + "</text><br>");
+                }
+                 check(arr,arr.length,val);
+            }
+        });
+   } 
+    </script>
+</body>
+</html>
