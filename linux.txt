@@ -1,0 +1,99 @@
+查看磁盘空间
+du --max-depth=1 -h
+链接mysql 命令 
+
+mysql -u root -p
+密码
+
+mysql-> create user userone（用户名） identified by 'password'(密码);
+
+//创建用户名和密码
+
+mysql-> create database datatable（数据库名）;
+
+mysql->  grant all on userone.* to datatable;
+
+mysql->exit;
+
+
+重启apache 
+
+sudo /etc/init.d/apache2 restart;
+
+导出数据库
+命令：mysqldump -u 用户名 -p 数据库名 > 导出的文件名
+
+导出一个表
+命令：mysqldump -u 用户名 -p 数据库名 表名> 导出的文件名
+
+导出一个数据库结构
+命令：mysqldump -u root -p -d --add-drop-table test > test_db.sql
+-d 没有数据 --add-drop-table 在每个create 语句之前增加一个drop table
+
+删除数据库
+drop database dataname;
+
+
+导入sql文件
+创建数据库：create database 数据库名字;
+选择数据库：use 数据库名字 ;
+设置字符集：set names utf8;
+mysql>source /var/www/html/xxx.sql;
+
+
+
+密码设置：
+
+
+use mysql;
+
+update user set password=PASSWORD('root') where user='root';
+
+flush privileges;
+
+放远程连接：
+
+
+
+
+use mysql;
+
+
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root';
+
+
+flush privileges;
+
+
+
+
+授权
+GRANT privileges ON databasename.tablename TO 'username'@'host'identified by ‘密码’
+
+说明:
+
+    privileges：用户的操作权限，如SELECT，INSERT，UPDATE等，如果要授予所的权限则使用ALL
+    databasename：数据库名
+    tablename：表名，如果要授予该用户对所有数据库和表的相应操作权限则可用*表示，如*.*
+
+
+----------------------------------------------------------------------------------------------
+Ubuntu apt-get彻底卸载软件包
+
+
+# 删除软件及其配置文件
+apt-get --purge remove <package>
+# 删除没用的依赖包
+apt-get autoremove <package>
+# 此时dpkg的列表中有“rc”状态的软件包，可以执行如下命令做最后清理：
+dpkg -l |grep ^rc|awk '{print $2}' |sudo xargs dpkg -P
+
+ftp 安装
+https://blog.csdn.net/ziyunmuxu/article/details/51366870
+https://www.linuxidc.com/Linux/2016-12/138563.htm
+
+
+//查看错误 php
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
+

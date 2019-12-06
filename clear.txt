@@ -1,0 +1,27 @@
+清除tppabs标签：
+
+html文件中：
+
+查找：\btppabs="h[^"]*"
+
+替换：（空）
+
+
+css文件中的图片链接（以gif图片为例）：
+
+查找：tpa=http://[^\s]*.gif
+
+替换：（空）
+
+
+css文件中的注释：
+
+查找：/\*tpa.*?\*/
+
+替换：（空）
+
+修复confirm链接：
+
+查找：href=" *javascript:if\(confirm\('(htt[^"\s]*).*?"
+
+替换：href="$1"
